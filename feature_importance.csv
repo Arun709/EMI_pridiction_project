@@ -1,0 +1,21 @@
+feature,importance
+requested_amount,0.15871389856461718
+current_emi_amount,0.10354011094839684
+monthly_salary,0.10200809657696054
+house_type_Rented,0.08081448533264718
+groceries_utilities,0.0708359384101489
+travel_expenses,0.06222605329175265
+college_fees,0.05561250967309771
+bank_balance,0.04706984570542189
+other_monthly_expenses,0.04407291660970753
+credit_score,0.034585149032549355
+school_fees,0.03220085628410508
+requested_tenure,0.025614312277753855
+house_type_Own,0.01948919386967853
+emi_scenario_Vehicle EMI,0.018855957150116655
+emi_scenario_Personal Loan EMI,0.015010959914315523
+emi_scenario_Home Appliances EMI,0.011423991406635553
+education_Professional,0.009634339264895328
+education_High School,0.008072488503849548
+dependents,0.007002868476924279
+family_size,0.0069240104226179
