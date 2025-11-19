@@ -1099,10 +1099,10 @@ with tab5:
     - **Institution:** GUVI Geek Networks
     
     **Links:**
-    - 🌐 **GitHub Repository:** [Your GitHub Link]
-    - ☁️ **Live Demo:** [Streamlit Cloud URL]
-    - 📧 **Email:** your.email@example.com
-    - 💼 **LinkedIn:** [Your LinkedIn]
+    - 🌐 **GitHub Repository:** ["https://github.com/Arun709/EMI_pridiction_project.git"]
+    - ☁️ **Live Demo:** ["https://emipridictionproject-lpswrcbez4hjnaysq3vztt.streamlit.app/"]
+    - 📧 **Email:** kannanarunachalam421@gmail.com
+    - 💼 **LinkedIn:** ["linkedin.com/in/arunachalam-kannan-083168366"]
     """)
 
 # ==================== FOOTER ====================
@@ -1117,3 +1117,4 @@ st.markdown("""
     <p style='margin-top:20px; font-size:0.95rem;'>© 2025 All rights reserved. Built with ❤️ for FinTech Innovation</p>
 </div>
 """, unsafe_allow_html=True)
+
