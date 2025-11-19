@@ -1,6 +1,3 @@
-# app.py - EMIPredict AI (PERFECT UI - ALL TEXT READABLE)
-# GUVI × HCLTech Capstone Project 2025
-
 import streamlit as st
 import joblib
 import pandas as pd
@@ -17,15 +14,13 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# ==================== PERFECT READABLE CSS ====================
+# ==================== PERFECT READABLE CSS (NO WHITE IN METRICS) ====================
 st.markdown("""
 <style>
-    /* Main App Background - Dark Blue */
     .stApp {
         background: linear-gradient(135deg, #0f172a 0%, #1e3b5a 100%);
     }
     
-    /* Main Content Container - Keep Dark with Light Text */
     .main .block-container {
         padding: 2rem 3rem;
         background: rgba(15, 23, 42, 0.7);
@@ -34,25 +29,11 @@ st.markdown("""
         backdrop-filter: blur(10px);
     }
     
-    /* ALL TEXT - LIGHT COLOR FOR DARK BACKGROUND */
-    .main h1,
-    .main h2,
-    .main h3,
-    .main h4,
-    .main h5,
-    .main h6,
-    .main p,
-    .main span,
-    .main div,
-    .main li,
-    .main label,
-    .main strong,
-    .main em,
-    .main a {
+    .main h1, .main h2, .main h3, .main h4, .main h5, .main h6, .main p,
+    .main span, .main div, .main li, .main label, .main strong, .main em, .main a {
         color: #f1f5f9 !important;
     }
     
-    /* Headers - Bright and Visible */
     h1 {
         color: #ffffff !important;
         font-weight: 900 !important;
@@ -60,7 +41,6 @@ st.markdown("""
         text-shadow: 0 0 20px rgba(14, 165, 233, 0.5);
         border-bottom: 5px solid #0ea5e9;
         padding-bottom: 1rem;
-        margin-bottom: 2rem;
         background: linear-gradient(120deg, #0ea5e9, #3b82f6);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
@@ -70,44 +50,21 @@ st.markdown("""
         color: #e0f2fe !important;
         font-weight: 800 !important;
         font-size: 2.2rem !important;
-        margin-top: 2rem;
-        padding: 15px 0;
         border-left: 6px solid #0ea5e9;
         padding-left: 20px;
-        text-shadow: 0 2px 4px rgba(0,0,0,0.3);
     }
     
     h3 {
         color: #bae6fd !important;
         font-weight: 700 !important;
         font-size: 1.8rem !important;
-        margin-top: 1.5rem;
     }
     
-    /* Paragraph and List Text - Bright White */
-    p, li, span {
-        color: #f1f5f9 !important;
-        font-size: 1.1rem !important;
-        line-height: 1.8 !important;
-    }
-    
-    /* Strong text - Even brighter */
-    strong, b {
+    strong {
         color: #ffffff !important;
         font-weight: 700 !important;
     }
     
-    /* Links */
-    a {
-        color: #60a5fa !important;
-        text-decoration: underline;
-    }
-    
-    a:hover {
-        color: #93c5fd !important;
-    }
-    
-    /* Buttons - High Visibility */
     .stButton > button {
         background: linear-gradient(135deg, #0ea5e9 0%, #2563eb 100%) !important;
         color: white !important;
@@ -116,19 +73,15 @@ st.markdown("""
         padding: 18px 36px !important;
         font-weight: 800 !important;
         font-size: 1.2rem !important;
-        transition: all 0.3s ease !important;
         box-shadow: 0 6px 20px rgba(14, 165, 233, 0.5) !important;
         text-transform: uppercase !important;
-        letter-spacing: 1.5px !important;
     }
     
     .stButton > button:hover {
-        transform: translateY(-3px) scale(1.02) !important;
+        transform: translateY(-3px) !important;
         box-shadow: 0 10px 30px rgba(14, 165, 233, 0.7) !important;
-        background: linear-gradient(135deg, #3b82f6 0%, #0ea5e9 100%) !important;
     }
     
-    /* Sidebar - Dark Theme with Light Text */
     section[data-testid="stSidebar"] {
         background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%) !important;
         padding: 1.5rem !important;
@@ -139,13 +92,7 @@ st.markdown("""
         font-weight: 600 !important;
     }
     
-    section[data-testid="stSidebar"] h1,
-    section[data-testid="stSidebar"] h2,
-    section[data-testid="stSidebar"] h3 {
-        color: #ffffff !important;
-    }
-    
-    /* Metrics - Light Background with Dark Text */
+    /* ==================== METRICS: ULTRA-DARK TEXT ONLY ==================== */
     div[data-testid="stMetric"] {
         background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%) !important;
         padding: 25px !important;
@@ -154,23 +101,20 @@ st.markdown("""
         box-shadow: 0 4px 15px rgba(0,0,0,0.3) !important;
     }
     
-    div[data-testid="stMetric"] label {
-        color: #0c4a6e !important;
+    div[data-testid="stMetric"] *,
+    div[data-testid="stMetric"] label,
+    div[data-testid="stMetric"] [data-testid="stMetricLabel"],
+    div[data-testid="stMetric"] [data-testid="stMetricValue"],
+    div[data-testid="stMetric"] [data-testid="stMetricDelta"] {
+        color: #0f172a !important;
         font-weight: 700 !important;
-        font-size: 1.1rem !important;
     }
     
     div[data-testid="stMetric"] [data-testid="stMetricValue"] {
-        color: #0c4a6e !important;
         font-weight: 900 !important;
         font-size: 2.2rem !important;
     }
     
-    div[data-testid="stMetric"] [data-testid="stMetricDelta"] {
-        color: #0369a1 !important;
-    }
-    
-    /* Alert Boxes - Light Background with Dark Text */
     .stInfo {
         background: linear-gradient(135deg, #dbeafe 0%, #bae6fd 100%) !important;
         border-left: 6px solid #0284c7 !important;
@@ -219,13 +163,11 @@ st.markdown("""
         font-weight: 600 !important;
     }
     
-    /* Tabs - Better Visibility */
     .stTabs [data-baseweb="tab-list"] {
         gap: 10px;
         background: rgba(226, 232, 240, 0.1);
         padding: 15px;
         border-radius: 15px;
-        backdrop-filter: blur(10px);
     }
     
     .stTabs [data-baseweb="tab"] {
@@ -236,25 +178,14 @@ st.markdown("""
         font-size: 1.1rem !important;
         color: #e0f2fe !important;
         border: 2px solid rgba(14, 165, 233, 0.3) !important;
-        transition: all 0.3s ease;
-        backdrop-filter: blur(10px);
-    }
-    
-    .stTabs [data-baseweb="tab"]:hover {
-        background: rgba(14, 165, 233, 0.2) !important;
-        border-color: #0ea5e9 !important;
-        transform: translateY(-2px);
-        color: #ffffff !important;
     }
     
     .stTabs [aria-selected="true"] {
         background: linear-gradient(135deg, #0ea5e9 0%, #2563eb 100%) !important;
         color: white !important;
         box-shadow: 0 4px 15px rgba(14, 165, 233, 0.5) !important;
-        border-color: transparent !important;
     }
     
-    /* Expanders */
     .streamlit-expanderHeader {
         background: rgba(14, 165, 233, 0.2) !important;
         border-radius: 10px !important;
@@ -262,65 +193,41 @@ st.markdown("""
         color: #e0f2fe !important;
         padding: 15px !important;
         border: 2px solid rgba(14, 165, 233, 0.5) !important;
-        backdrop-filter: blur(10px);
     }
     
-    .streamlit-expanderHeader:hover {
-        background: rgba(14, 165, 233, 0.3) !important;
-        color: #ffffff !important;
-    }
-    
-    /* Input Fields Labels */
-    .stNumberInput label,
-    .stSelectbox label,
-    .stSlider label,
-    .stTextInput label {
+    .stNumberInput label, .stSelectbox label, .stSlider label, .stTextInput label {
         color: #e0f2fe !important;
         font-weight: 700 !important;
         font-size: 1.05rem !important;
     }
     
-    /* Input Fields */
-    .stNumberInput input,
-    .stSelectbox select,
-    .stTextInput input {
+    .stNumberInput input, .stSelectbox select, .stTextInput input {
         background: rgba(255, 255, 255, 0.1) !important;
         color: #f1f5f9 !important;
         border: 2px solid rgba(14, 165, 233, 0.3) !important;
         border-radius: 8px !important;
-        font-weight: 600 !important;
     }
     
-    /* Dataframe */
     .stDataFrame {
         border-radius: 15px;
         overflow: hidden;
         box-shadow: 0 4px 15px rgba(0,0,0,0.3);
     }
     
-    /* Result Cards */
     .result-card {
         padding: 45px;
         border-radius: 20px;
         text-align: center;
         margin: 25px 0;
         box-shadow: 0 10px 30px rgba(0,0,0,0.4);
-        transition: transform 0.3s ease;
-    }
-    
-    .result-card:hover {
-        transform: translateY(-10px);
-        box-shadow: 0 15px 40px rgba(0,0,0,0.5);
     }
     
     .result-card h2 {
         border: none !important;
         padding: 0 !important;
         margin: 0 !important;
-        text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
     }
     
-    /* Footer */
     .footer {
         text-align: center;
         padding: 40px;
@@ -336,33 +243,11 @@ st.markdown("""
         color: #f1f5f9 !important;
     }
     
-    /* Horizontal Rule */
     hr {
         margin: 2.5rem 0;
         border: none;
         height: 3px;
         background: linear-gradient(90deg, transparent, #0ea5e9, transparent);
-        box-shadow: 0 0 10px rgba(14, 165, 233, 0.5);
-    }
-    
-    /* Code blocks */
-    code {
-        background: rgba(15, 23, 42, 0.8) !important;
-        color: #60a5fa !important;
-        padding: 2px 6px;
-        border-radius: 4px;
-        font-weight: 600;
-    }
-    
-    pre {
-        background: rgba(15, 23, 42, 0.8) !important;
-        border: 2px solid rgba(14, 165, 233, 0.3);
-        border-radius: 10px;
-        padding: 15px;
-    }
-    
-    pre code {
-        color: #bae6fd !important;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -372,6 +257,18 @@ st.title("💰 EMIPredict AI")
 st.subheader("Intelligent Financial Risk Assessment Platform")
 st.markdown("**🎓 GUVI × HCLTech Capstone Project 2025**")
 st.markdown("---")
+
+# ==================== MODEL LOADING ====================
+@st.cache_resource
+def load_model():
+    try:
+        return joblib.load("emi_full_pipeline.pkl")
+    except FileNotFoundError:
+        st.error("❌ Model file not found! Ensure 'emi_full_pipeline.pkl' is in the project folder.")
+        st.stop()
+    except Exception as e:
+        st.error(f"⚠️ Error loading model: {e}")
+        st.stop()
 
 # ==================== NAVIGATION TABS ====================
 tab1, tab2, tab3, tab4, tab5 = st.tabs([
@@ -394,8 +291,6 @@ with tab1:
     """)
     
     st.markdown("---")
-    
-    # Business Use Cases
     st.markdown("## 💼 Business Use Cases")
     
     col1, col2 = st.columns(2)
@@ -431,8 +326,6 @@ with tab1:
         """)
     
     st.markdown("---")
-    
-    # Platform Capabilities
     st.markdown("## 🚀 Platform Capabilities")
     
     col1, col2, col3 = st.columns(3)
@@ -462,8 +355,6 @@ with tab1:
         """)
     
     st.markdown("---")
-    
-    # Key Statistics
     st.markdown("## 📈 Platform Statistics")
     
     col1, col2, col3, col4 = st.columns(4)
@@ -473,8 +364,6 @@ with tab1:
     col4.metric("Features", "22", help="Financial & demographic variables")
     
     st.markdown("---")
-    
-    # Expected Results
     st.markdown("## 🎯 Expected Results")
     
     col1, col2 = st.columns(2)
@@ -503,22 +392,9 @@ with tab2:
     st.markdown("**Fill the form below to get instant financial assessment**")
     st.markdown("---")
     
-    # Load Model
-    @st.cache_resource
-    def load_model():
-        try:
-            return joblib.load("emi_full_pipeline.pkl")
-        except FileNotFoundError:
-            st.error("❌ Model file not found! Ensure 'emi_full_pipeline.pkl' is in the project folder.")
-            st.stop()
-        except Exception as e:
-            st.error(f"⚠️ Error loading model: {e}")
-            st.stop()
-    
     with st.spinner("🔄 Loading AI models..."):
         pipeline = load_model()
     
-    # Extract pipeline components
     try:
         model_clf = pipeline['classification_model']
         model_reg = pipeline['regression_model']
@@ -532,10 +408,8 @@ with tab2:
         st.error(f"❌ Pipeline error: Missing key {e}")
         st.stop()
     
-    # Input Form
     st.markdown("### 📋 Applicant Information")
     
-    # Personal Details
     with st.expander("👤 Personal Details", expanded=True):
         col1, col2, col3 = st.columns(3)
         with col1:
@@ -549,7 +423,6 @@ with tab2:
             family_size = dependents + 2
             st.metric("Family Size", family_size)
     
-    # Employment Details
     with st.expander("💼 Employment & Income", expanded=True):
         col1, col2, col3 = st.columns(3)
         with col1:
@@ -561,7 +434,6 @@ with tab2:
         with col3:
             house_type = st.selectbox("House Type", ["Rented", "Owned", "Family"])
     
-    # Monthly Expenses
     with st.expander("💸 Monthly Expenses", expanded=True):
         col1, col2, col3, col4 = st.columns(4)
         with col1:
@@ -575,7 +447,6 @@ with tab2:
         
         other_monthly_expenses = st.number_input("Other Expenses (₹)", 0, 30000, 8000, step=1000)
     
-    # Financial Health
     with st.expander("💳 Financial Status", expanded=True):
         col1, col2, col3, col4 = st.columns(4)
         with col1:
@@ -587,7 +458,6 @@ with tab2:
         with col4:
             current_emi_amount = st.number_input("Current EMI (₹)", 0, 100000, 0, step=1000)
     
-    # Loan Request
     with st.expander("🏦 Loan Request Details", expanded=True):
         col1, col2, col3 = st.columns(3)
         with col1:
@@ -605,49 +475,31 @@ with tab2:
     
     st.markdown("---")
     
-    # Predict Button
     col1, col2, col3 = st.columns([1, 2, 1])
     with col2:
         predict_btn = st.button("🚀 Analyze Eligibility Now", type="primary", use_container_width=True)
     
-    # Prediction Logic
     if predict_btn:
         with st.spinner("🔍 Analyzing your financial profile..."):
-            # Build input dictionary
             input_dict = {
-                'age': age,
-                'gender': gender,
-                'marital_status': marital_status,
-                'education': education,
-                'monthly_salary': monthly_salary,
-                'employment_type': employment_type,
-                'years_of_employment': years_of_employment,
-                'company_type': company_type,
-                'house_type': house_type,
-                'family_size': family_size,
-                'dependents': dependents,
-                'school_fees': school_fees,
-                'college_fees': college_fees,
-                'travel_expenses': travel_expenses,
-                'groceries_utilities': groceries_utilities,
-                'other_monthly_expenses': other_monthly_expenses,
-                'existing_loans': existing_loans,
-                'current_emi_amount': current_emi_amount,
-                'credit_score': credit_score,
-                'bank_balance': bank_balance,
-                'emi_scenario': emi_scenario,
-                'requested_amount': requested_amount,
-                'requested_tenure': requested_tenure
+                'age': age, 'gender': gender, 'marital_status': marital_status,
+                'education': education, 'monthly_salary': monthly_salary,
+                'employment_type': employment_type, 'years_of_employment': years_of_employment,
+                'company_type': company_type, 'house_type': house_type,
+                'family_size': family_size, 'dependents': dependents,
+                'school_fees': school_fees, 'college_fees': college_fees,
+                'travel_expenses': travel_expenses, 'groceries_utilities': groceries_utilities,
+                'other_monthly_expenses': other_monthly_expenses, 'existing_loans': existing_loans,
+                'current_emi_amount': current_emi_amount, 'credit_score': credit_score,
+                'bank_balance': bank_balance, 'emi_scenario': emi_scenario,
+                'requested_amount': requested_amount, 'requested_tenure': requested_tenure
             }
             
-            # Add missing features
             for col in num_features:
                 if col not in input_dict:
                     input_dict[col] = 0
             
             df_input = pd.DataFrame([input_dict])
-            
-            # CORRECT PREPROCESSING ORDER
             df_numeric = df_input[num_features].copy()
             df_categorical = df_input[cat_features].copy()
             
@@ -657,7 +509,6 @@ with tab2:
             )
             
             df_categorical_encoded = pd.get_dummies(df_categorical, drop_first=True)
-            
             df_processed = pd.concat([df_numeric_scaled, df_categorical_encoded], axis=1)
             
             for col in final_columns:
@@ -666,7 +517,6 @@ with tab2:
             
             X = df_processed[final_columns].fillna(0)
             
-            # Predict
             pred_class = model_clf.predict(X)[0]
             pred_proba = model_clf.predict_proba(X)[0]
             max_emi = float(model_reg.predict(X)[0])
@@ -674,11 +524,9 @@ with tab2:
             eligibility = class_labels[pred_class]
             confidence = np.max(pred_proba) * 100
         
-        # Display Results
         st.success("✅ **Analysis Complete!**")
         st.markdown("---")
         
-        # Result Cards
         col1, col2, col3 = st.columns(3)
         
         with col1:
@@ -712,7 +560,6 @@ with tab2:
         
         st.markdown("---")
         
-        # Financial Summary
         st.markdown("### 📊 Financial Overview")
         total_expenses = (school_fees + college_fees + travel_expenses + 
                          groceries_utilities + other_monthly_expenses + current_emi_amount)
@@ -727,7 +574,6 @@ with tab2:
         
         st.markdown("---")
         
-        # Charts
         st.markdown("### 📈 Prediction Analysis")
         
         fig = make_subplots(
@@ -767,7 +613,6 @@ with tab2:
         
         st.markdown("---")
         
-        # Recommendations
         st.markdown("### 💡 Recommendations")
         
         if eligibility == "Eligible":
@@ -1094,15 +939,15 @@ with tab5:
     
     st.success("""
     **Project Team**
-    - **Developer:** Your Name
+    - **Developer:** Arunachalam Kannan
     - **Mentor:** GUVI × HCLTech Team
     - **Institution:** GUVI Geek Networks
     
     **Links:**
-    - 🌐 **GitHub Repository:** ["https://github.com/Arun709/EMI_pridiction_project.git"]
-    - ☁️ **Live Demo:** ["https://emipridictionproject-lpswrcbez4hjnaysq3vztt.streamlit.app/"]
+    - 🌐 **GitHub Repository:** github.com/Arun709/EMI_pridiction_project
+    - ☁️ **Live Demo:** emipridictionproject-lpswrcbez4hjnaysq3vztt.streamlit.app
     - 📧 **Email:** kannanarunachalam421@gmail.com
-    - 💼 **LinkedIn:** ["linkedin.com/in/arunachalam-kannan-083168366"]
+    - 💼 **LinkedIn:** linkedin.com/in/arunachalam-kannan-083168366
     """)
 
 # ==================== FOOTER ====================
@@ -1117,4 +962,3 @@ st.markdown("""
     <p style='margin-top:20px; font-size:0.95rem;'>© 2025 All rights reserved. Built with ❤️ for FinTech Innovation</p>
 </div>
 """, unsafe_allow_html=True)
-
