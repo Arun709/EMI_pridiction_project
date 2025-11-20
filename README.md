@@ -19,7 +19,7 @@ An AI-powered financial risk assessment platform that predicts EMI eligibility a
 
 ## 🚀 Live Demo
 
-🔗 **[Try it here](your-streamlit-cloud-url)**
+🔗 **[Try it here]("https://emipridictionproject-9zcck5xfgrlampdfphlnul.streamlit.app/")**
 
 
 ## 🛠️ Tech Stack
@@ -30,6 +30,7 @@ An AI-powered financial risk assessment platform that predicts EMI eligibility a
 - **Plotly** - Interactive charts
 - **MLflow** - Experiment tracking
 - **Scikit-learn** - Data preprocessing
+
 
 
 
